@@ -46,8 +46,8 @@ A map showing POI in Duluth. Created from template:https://raw.githubusercontent
         const esriStreets = L.esri.basemapLayer('Gray').addTo(map);
 
         // add hosted feature layerfor springs
-        const springsLayer = L.esri.featureLayer({
-            url: 'https://services.arcgis.com/8df8p0NlLFEShl0r/arcgis/rest/services/springs/FeatureServer/0'
+        const poiLayer = L.esri.featureLayer({
+            url: 'https://services.arcgis.com/8df8p0NlLFEShl0r/arcgis/rest/services/POI_Duluth/FeatureServer/0'
         }).addTo(map);
 
 

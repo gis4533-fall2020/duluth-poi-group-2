@@ -50,10 +50,7 @@ A map showing POI in Duluth. Created from template:https://raw.githubusercontent
             url: 'https://services.arcgis.com/8df8p0NlLFEShl0r/arcgis/rest/services/springs/FeatureServer/0'
         }).addTo(map);
 
-        // add hosted feature layer for county boundaries
-        const countyLayer = L.esri.featureLayer({
-            url: 'https://services.arcgis.com/8df8p0NlLFEShl0r/arcgis/rest/services/St__Louis_County_boundary/FeatureServer/0'
-        }).addTo(map);
+
         // set up popup for springs layer
         springsLayer.bindPopup(function(evt) {
             return L.Util.template(

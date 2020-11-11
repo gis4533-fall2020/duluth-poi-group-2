@@ -42,7 +42,8 @@ A map showing POI in Duluth. Created from template:https://raw.githubusercontent
             center: [46.7367, -92.1605],
             zoom:11
         });
-        // add basemap 
+        // add basemap and labels
+        const esriLabelStreets = L.esri.basemapLayer('GrayLabels').addTo(map);
         const esriStreets = L.esri.basemapLayer('Gray').addTo(map);
 
         // add hosted feature layerfor springs

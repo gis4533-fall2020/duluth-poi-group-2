@@ -65,12 +65,16 @@ A map showing POI in Duluth. Created from template:https://raw.githubusercontent
         }
         /* link or anchor tag(<a>) styling */
         a {
-            color: aqua;
+            color: red;
         }
         /* put this text in line with other text in header */
         #header h5 {
             margin-top: 25px;
-        }
+            }
+      #logo {
+        width:200
+
+      }
     </style>
 </head>
 
@@ -81,9 +85,12 @@ A map showing POI in Duluth. Created from template:https://raw.githubusercontent
       <h5 class="right">GIS4533 | Fall 2020 | Kasey Jake Ben Matt </h5>
   </header>
 
+<img src="https://alfresco-static-files.s3.amazonaws.com/alfresco_images/dental/2017/08/29/2251ca99-9d31-4c23-bdbd-f984d7b36f13/FDI.png" style="float:right; margin:51px 400px 1px 1px; cursor:pointer; cursor:hand; border:0" width="200" height="100" alt="logo" />
+
     <div id="map"></div>
 
     <script>
+
         // add map
         const map = L.map('map', {
             center: [46.7367, -92.1605],
@@ -112,6 +119,7 @@ A map showing POI in Duluth. Created from template:https://raw.githubusercontent
         });
 
     </script>
+
 </body>
 
 </html>

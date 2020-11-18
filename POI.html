@@ -73,8 +73,39 @@ A map showing POI in Duluth. Created from template:https://raw.githubusercontent
             }
       #logo {
         width:200
+        }
+        .floating-panel {
+            width: 160px; /* Set the width of the sidebar */
+            position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+            z-index: 9999;
+            bottom: 0px;
+            left: 0px;
+            /* Black with some transparency */
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;    /* some nice rounded corners */
+            padding: 10px;
+            margin: 20px;
+            /* Text color */
+            color: navy;
+        }
 
-      }
+        /* The navigation menu links */
+        .floating-panel * {
+/*            padding: 6px 8px 6px 16px;*/
+            text-decoration: none;
+            display: block;
+        }
+
+        /* The navigation menu links */
+        .floating-panel a {
+            color: red;
+        }
+
+        /* When you mouse over the navigation links, change their color */
+        .floating-panel a:hover {
+            color: #f1f1f1;
+        }
+
     </style>
 </head>
 
@@ -88,6 +119,15 @@ A map showing POI in Duluth. Created from template:https://raw.githubusercontent
 <img src="https://alfresco-static-files.s3.amazonaws.com/alfresco_images/dental/2017/08/29/2251ca99-9d31-4c23-bdbd-f984d7b36f13/FDI.png" style="float:right; margin:51px 400px 1px 1px; cursor:pointer; cursor:hand; border:0" width="200" height="100" alt="logo" />
 
     <div id="map"></div>
+    <nav class="floating-panel">
+        <h2>Duluth Points of Interest</h2>
+        <h3><a href="https://www.visitduluth.com" target="_blank">More Info on Tourism</a></h3>
+        <h5>
+            <p>Welcome to the city of Duluth. There are many sights to see and activites to experience in this beautiful city. Here is a map showing off a few of these attractions for you
+            to visit during your stay here. Feel free to click the link above to see the Duluth tourism website and enjoy our city inbetween all the teeth talk! </p>
+
+        </h5>
+    </nav>
 
     <script>
 
@@ -119,6 +159,7 @@ A map showing POI in Duluth. Created from template:https://raw.githubusercontent
         });
 
     </script>
+
 
 </body>
 

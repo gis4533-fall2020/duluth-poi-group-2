@@ -1,33 +1,34 @@
-<html><!-- <HEAD> the head is not displayed in the browser;
-    rather, it provides the metadata for the page (telling the browser how to render it--><head>
-    <title> My Leaflet Map </title>
+<!--
+A map showing POI in Duluth. Created from template:https://raw.githubusercontent.com/kristofj-umd/webdev-unit/master/webdev5-examples/feature-service.html
+ -->
 
+<!doctype html>
+<html lang="en">
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css">
-    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+<head>
+    <meta charset="utf-8">
+    <title>POI Duluth</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
-    <!-- CSS Styling Start-->
+    <!-- Load Leaflet from CDN-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script>
+
+    <!-- Load Esri Leaflet from CDN -->
+    <script src="https://unpkg.com/esri-leaflet@2.2.3/dist/esri-leaflet.js" integrity="sha512-YZ6b5bXRVwipfqul5krehD9qlbJzc6KOGXYsDjU9HHXW2gK57xmWl2gU6nAegiErAqFXhygKIsWPKbjLPXVb2g==" crossorigin=""></script>
+
+    <!-- Load Esri Leaflet Renderers from CDN -->
+    <script src="https://unpkg.com/esri-leaflet-renderers@2.0.6/dist/esri-leaflet-renderers.js" integrity="sha512-mhpdD3igvv7A/84hueuHzV0NIKFHmp2IvWnY5tIdtAHkHF36yySdstEVI11JZCmSY4TCvOkgEoW+zcV/rUfo0A==" crossorigin=""></script>
+
     <style>
-        /*
-            styling to make map full-screen
-            source: https://leafletjs.com/examples/mobile/
-        */
-        body {
-            padding: 0;
-            margin: 0;
-        }
-        html, body, #map {
+        html,
+        body,
+        #map {
             height: 100%;
             width: 100%;
+            margin: 0;
+            padding: 0;
         }
-        #map {
-            top: 60px;
-        }
-
-        /*
-            Header styling
-            ref: http://jsfiddle.net/agorshkov23/5osbcpyc/
-        */
         #header {
             /* positions at the top of the page */
             top: 0;
@@ -41,15 +42,15 @@
             page*/
             height: 60px;
             /* white text */
-            color: white;
+            color: navy;
             /* green background */
-            background-color: green;
+            background-color: white;
             /* some spacing */
             padding-left: 12px;
             /* my attempt at not overlapping the map*/
             overflow: hidden;
             /* different font */
-            font-family: Helvetica, sans-serif;
+            font-family: times, sans-serif;
         }
         /* header children styling */
         #header * {
@@ -64,34 +65,102 @@
         }
         /* link or anchor tag(<a>) styling */
         a {
-            color: aqua;
+            color: red;
         }
         /* put this text in line with other text in header */
         #header h5 {
             margin-top: 25px;
+            }
+      #logo {
+        width:200
         }
+        .floating-panel {
+            width: 160px; /* Set the width of the sidebar */
+            position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+            z-index: 9999;
+            bottom: 0px;
+            left: 0px;
+            /* Black with some transparency */
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;    /* some nice rounded corners */
+            padding: 10px;
+            margin: 20px;
+            /* Text color */
+            color: navy;
+        }
+
+        /* The navigation menu links */
+        .floating-panel * {
+/*            padding: 6px 8px 6px 16px;*/
+            text-decoration: none;
+            display: block;
+        }
+
+        /* The navigation menu links */
+        .floating-panel a {
+            color: red;
+        }
+
+        /* When you mouse over the navigation links, change their color */
+        .floating-panel a:hover {
+            color: #f1f1f1;
+        }
+
     </style>
 </head>
+
 <body>
-    <header id="header">
+  <header id="header">
+      <h2>Duluth Welcomes The World Dental Congress</h2>
+      <h3><a href="http://www.world-dental-congress.org/" target="_blank">World Dental Federation</a></h3>
+      <h5 class="right">GIS4533 | Fall 2020 | Kasey Jake Ben Matt </h5>
+  </header>
+
+<img src="https://alfresco-static-files.s3.amazonaws.com/alfresco_images/dental/2017/08/29/2251ca99-9d31-4c23-bdbd-f984d7b36f13/FDI.png" style="float:right; margin:51px 400px 1px 1px; cursor:pointer; cursor:hand; border:0" width="200" height="100" alt="logo" />
+
+    <div id="map"></div>
+    <nav class="floating-panel">
         <h2>Duluth Points of Interest</h2>
-        <h3><a href="https://www.visitduluth.com" target="_blank">(Click for information on tourism)</a></h3>
-        <h5 class="right">GIS4533 | Fall 2020 | Kasey Jake Ben Matt </h5>
-    </header>
-    <!-- the container for our map -->
-    <div id="map" class="leaflet-container leaflet-safari leaflet-fade-anim leaflet-grab leaflet-touch-drag" tabindex="0" style="position: relative; outline: none;"><div class="leaflet-pane leaflet-map-pane" style="transform: translate3d(0px, -273px, 0px);"><div class="leaflet-pane leaflet-tile-pane"><div class="leaflet-layer " style="z-index: 1; opacity: 1;"><div class="leaflet-tile-container leaflet-zoom-animated" style="z-index: 18; transform: translate3d(0px, 0px, 0px) scale(1);"><img alt="" role="presentation" src="http://c.tile.osm.org/11/499/721.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(356px, 95px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://a.tile.osm.org/11/500/721.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(612px, 95px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://a.tile.osm.org/11/499/722.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(356px, 351px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://b.tile.osm.org/11/500/722.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(612px, 351px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://b.tile.osm.org/11/499/720.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(356px, -161px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://c.tile.osm.org/11/500/720.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(612px, -161px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://b.tile.osm.org/11/498/721.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(100px, 95px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://b.tile.osm.org/11/501/721.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(868px, 95px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://c.tile.osm.org/11/498/722.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(100px, 351px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://c.tile.osm.org/11/501/722.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(868px, 351px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://b.tile.osm.org/11/499/723.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(356px, 607px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://c.tile.osm.org/11/500/723.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(612px, 607px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://a.tile.osm.org/11/498/720.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(100px, -161px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://a.tile.osm.org/11/501/720.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(868px, -161px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://a.tile.osm.org/11/498/723.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(100px, 607px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://a.tile.osm.org/11/501/723.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(868px, 607px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://a.tile.osm.org/11/497/721.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-156px, 95px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://c.tile.osm.org/11/502/721.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1124px, 95px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://b.tile.osm.org/11/497/722.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-156px, 351px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://a.tile.osm.org/11/502/722.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1124px, 351px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://c.tile.osm.org/11/497/720.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-156px, -161px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://b.tile.osm.org/11/502/720.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1124px, -161px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://c.tile.osm.org/11/497/723.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-156px, 607px, 0px); opacity: 1;"><img alt="" role="presentation" src="http://b.tile.osm.org/11/502/723.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1124px, 607px, 0px); opacity: 1;"></div></div></div><div class="leaflet-pane leaflet-shadow-pane"></div><div class="leaflet-pane leaflet-overlay-pane"></div><div class="leaflet-pane leaflet-marker-pane"></div><div class="leaflet-pane leaflet-tooltip-pane"></div><div class="leaflet-pane leaflet-popup-pane"></div><div class="leaflet-proxy leaflet-zoom-animated" style="transform: translate3d(128012.5px, 184860px, 0px) scale(1024);"></div></div><div class="leaflet-control-container"><div class="leaflet-top leaflet-left"><div class="leaflet-control-zoom leaflet-bar leaflet-control"><a class="leaflet-control-zoom-in" href="#" title="Zoom in" role="button" aria-label="Zoom in">+</a><a class="leaflet-control-zoom-out" href="#" title="Zoom out" role="button" aria-label="Zoom out">−</a></div></div><div class="leaflet-top leaflet-right"></div><div class="leaflet-bottom leaflet-left"></div><div class="leaflet-bottom leaflet-right"><div class="leaflet-control-attribution leaflet-control"><a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a></div></div></div></div>
+        <h3><a href="https://www.visitduluth.com" target="_blank">(More Information on Tourism)</a></h3>
+        <h5>
+            <p>Welcome to the city of Duluth. There are many sights to see and activites to experience in this beautiful city. Here is a map showing off a few of these attractions for you
+            to visit during your stay here. Feel free to click the link above to see the Duluth tourism website and enjoy our city inbetween all the teeth talk! </p>
+
+        </h5>
+    </nav>
 
     <script>
-        // initialize the map
-        var map = L.map('map').setView([46.7867, -92.1005], 11);
 
-        // load a tile layer
-        // loading the base layer of map tiles using a URL template
-        // this template ({z}/{x}/{y}) allows leaflet to locate tiles with the
-        // correct zoom, x, and y coordinates
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(map);
+        // add map
+        const map = L.map('map', {
+            center: [46.7367, -92.1605],
+            zoom:11
+        });
+        // add basemap and labels
+        const esriLabelStreets = L.esri.basemapLayer('GrayLabels').addTo(map);
+        const esriStreets = L.esri.basemapLayer('Gray').addTo(map);
+
+        // add hosted feature layerfor springs
+        const poiLayer = L.esri.featureLayer({
+            url: 'https://services.arcgis.com/8df8p0NlLFEShl0r/arcgis/rest/services/POI_Duluth/FeatureServer/0'
+        }).addTo(map);
+
+
+        // set up popup for springs layer
+        poiLayer.bindPopup(function(evt) {
+            return L.Util.template(
+                '<table>' +
+                '<tr><td>Attraction:</td><td>{USER_Attra}</td></tr>' +
+                '<tr><td>Address:</td><td>{USER_Addre}</td></tr>' +
+                '<tr><td>Website:</td><td>{USER_Websi}</td></tr>' +
+                '<tr><td>Description:</td><td>{USER_Descr}</td></tr>' +
+                '</table>',
+                evt.feature.properties);
+        });
+
     </script>
 
 
+</body>
 
-</body></html>
+</html>
